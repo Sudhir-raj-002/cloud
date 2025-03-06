@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.29.9.js"></script>
+
+</head>
+
+<body>
+
+    <h1>Student Data Dashboard Using Pubnub</h1>
+
+    <form id="studentForm">
+
+        <input type="text" id="name" placeholder="Name" required><input type="number" id="age" placeholder="Age" required>
+
+        <input type="text" id="grade" placeholder="Grade" required>
+
+        <button type="submit">Submit</button>
+
+    </form>
+
+    <table>
+
+        <thead><tr><th>Name</th><th>Age</th><th>Grade</th></tr></thead>
+
+        <tbody id="studentData"></tbody>
+
+    </table>
+
+    <script>
+
+        const pubnub = new PubNub({publishKey: 'pub-c-cf8b4107-8428-4d76-801e-11519f11a01b',subscribeKey: 'sub-c-9ceabca6-d606-4060-bab2-464084a7fd9e'});
+
+        document.getElementById('studentForm').onsubmit = event => {
+
+            event.preventDefault();
+
+            const student = {
+
+                name: document.getElementById('name').value,
+
+                age: document.getElementById('age').value,
+
+                grade: document.getElementById('grade').value
+
+            };
+
+            pubnub.publish({ channel: 'student_channel', message: student });
+
+            document.getElementById('studentForm').reset();
+
+        };
+
+        pubnub.subscribe({ channels: ['student_channel'] });
+
+        pubnub.addListener({
+
+            message: ({ message: student }) => {
+
+                document.getElementById('studentData').innerHTML += `<tr><td>${student.name}</td><td>${student.age}</td><td>${student.grade}</td></tr>`;}
+
+        });
+
+    </script></body></html>
