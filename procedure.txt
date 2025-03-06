@@ -1,0 +1,104 @@
+Step 1: Create an Account on Docker Hub
+1. Go to https://hub.docker.com.
+2. Click Sign Up and create an account.
+3. Verify your email and log in to your account.
+
+Step 2: Create a Public Repository in Docker Hub
+1. Click Repositories in the top menu.
+2. Click Create Repository.
+3. Enter:
+○ Name: my-nginx-html
+○ Visibility: Public
+4. Click Create.
+
+Step 3: Create a Simple HTML Page
+
+1. Open a terminal or command prompt.
+Create a new project folder:
+mkdir my-docker-nginx
+cd my-docker-nginx
+2.
+Create an index.html file:
+nano index.html
+3.
+Add the following content:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dockerized Nginx Page</title>
+</head>
+<body>
+<h1>Welcome to My Nginx Page on Docker!</h1>
+</body>
+</html>
+4.
+5. Save and exit (CTRL + X, then Y and Enter).
+
+Step 4: Create a Dockerfile
+Create a Dockerfile:
+nano Dockerfile
+1.
+
+Add the following content:
+dockerfile
+# Use the official Nginx base image
+FROM nginx:latest
+# Copy the HTML file to Nginx default directory
+COPY index.html /usr/share/nginx/html/index.html
+# Expose port 80
+EXPOSE 80
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
+2.
+3. Save and exit.
+
+Step 5: Build, Tag, and Run the Docker Image
+Login to Docker Hub:
+docker login
+1. Enter your Docker Hub username and password when prompted.
+Build the Docker image:
+docker build -t my-nginx-html .
+2.
+Run the container to test locally:
+docker run -d -p 8080:80 my-nginx-html
+3.
+Open a browser and go to:
+arduino
+
+http://localhost:8080
+4. You should see the HTML page.
+
+Step 6: Tag and Push the Image to Docker Hub
+Tag the image with your Docker Hub username:
+sh
+docker tag my-nginx-html <your-dockerhub-username>/my-nginx-html:latest
+Example:
+sh
+CopyEdit
+docker tag my-nginx-html johndoe/my-nginx-html:latest
+1.
+Push the image to Docker Hub:
+sh
+docker push <your-dockerhub-username>/my-nginx-html:latest
+Example:
+sh
+docker push johndoe/my-nginx-html:latest
+2.
+
+Step 7: Verify the Image on Docker Hub
+1. Go to Docker Hub.
+2. Click on Repositories → my-nginx-html.
+3. You should see your uploaded Docker image.
+
+Step 8: Pull and Run the Image from Docker Hub
+
+To test from another machine, run:
+sh
+docker run -d -p 8080:80 <your-dockerhub-username>/my-nginx-html:latest
+
+Then visit:
+arduino
+http://localhost:8080
